@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Глеб Винокуров](https://up.htmlacademy.ru/javascript/13/user/485931).
-* Наставник: `Неизвестно`.
+* Наставник: [Владислав Балабанович] (https://htmlacademy.ru/profile/balabanovich).
 
 ---
 
