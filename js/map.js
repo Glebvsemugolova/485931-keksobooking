@@ -68,26 +68,6 @@ function randomize(arr) {
  * @param {Array} arr
  */
 
-function generateRandomArrayFromSource(arr) {
-  var count = randomNumber(0, arr.length);
-  var excluded = [];
-  var result = [];
-
-  for (var i = 0; i < count; i++) {
-    var index = randomNumber(0, arr.length, excluded);
-
-    excluded.push(index);
-    result.push(arr[index]);
-  }
-
-  return result;
-}
-
-/**
- *
- * @param {Array} arr
- */
-
 function stirArray(arr) {
   var excluded = [];
   var result = [];
@@ -104,8 +84,12 @@ function stirArray(arr) {
 
 var result = [];
 
-for (var i = 0; i < NUMBERS.length; i++) {
-  result.push({
+var createMapObj = function () {
+  var location = {
+    x: randomNumber(300, 900),
+    y: randomNumber(150, 500)
+  };
+  return {
     avatar: 'img/avatars/user' + NUMBERS[i] + '.png',
     offer: {
       title: TITLES[i],
@@ -116,18 +100,22 @@ for (var i = 0; i < NUMBERS.length; i++) {
       guests: randomNumber(1, 10),
       checkin: randomize(CHECK_TIMES),
       checkout: randomize(CHECK_TIMES),
-      features: generateRandomArrayFromSource(FEATURES),
+      features: FEATURES.slice(randomNumber(0, FEATURES.length)),
       description: '',
       photos: stirArray(PHOTOS)
     },
     location: {
-      x: randomNumber(300, 900),
-      y: randomNumber(150, 500)
+      x: location.x,
+      y: location.y
     }
-  });
+  };
+};
+
+for (var i = 0; i < NUMBERS.length; i++) {
+  result.push(createMapObj());
 }
 
-document.querySelector('.map').classList.remove('map--faded');
+//document.querySelector('.map').classList.remove('map--faded');
 
 function renderPins() {
   // render pins
@@ -166,6 +154,7 @@ function renderCards() {
     cardElement.querySelector('.popup__description').textContent = mapCard.offer.description;
     cardElement.querySelector('.popup__photos').textContent = mapCard.offer.description;
     cardElement.querySelector('img').src = mapCard.avatar;
+    cardElement.querySelector('.popup__features').innerHTML = ''; // не знаю можно ли так
     mapCard.offer.features.forEach(function (feature) {
       var el = document.createElement('LI');
       el.className = 'popup__feature popup__feature--' + feature;
@@ -191,7 +180,39 @@ function renderCards() {
   document.querySelector('.map').insertBefore(cardsList, document.querySelector('.map__filters-container'));
 }
 
-renderPins();
+/*renderPins();
 renderCards();
+*/
 
+var mapPinMain = document.querySelector('.map__pin--main');
+var adForm = document.querySelector('.ad-form');
+var formFilesdsets = document.querySelectorAll('fieldset');
+var inputAddress = document.getElementById('address');
+var mapPin = document.querySelectorAll('.map__pin');
+
+inputAddress.value = (mapPinMain.offsetLeft + mapPinMain.offsetWidth / 2) + ', ' + (mapPinMain.offsetTop + mapPinMain.offsetHeight);
+
+for (var i = 0; i < formFilesdsets.length; i++) {
+  formFilesdsets[i].disabled = true;
+}
+
+mapPinMain.addEventListener('mouseup', function () {
+  document.querySelector('.map').classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  for (var i = 0; i < formFilesdsets.length; i++) {
+    formFilesdsets[i].disabled = false;
+  }
+  inputAddress.value = (mapPinMain.offsetLeft + mapPinMain.offsetWidth / 2) + ', ' + (mapPinMain.offsetTop + mapPinMain.offsetHeight / 2 + 22);
+  renderPins();
+});
+
+for (var i = 0; i < mapPin.length; i++) {
+  mapPin[i].addEventListener('click', function (evt) {
+    if (evt.target.className.indexOf('map__pin--main') !== -1) {
+      evt.preventDefault();
+    } else {
+      renderCards();
+    }
+  });
+}
 
