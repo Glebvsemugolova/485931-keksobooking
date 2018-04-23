@@ -1,9 +1,12 @@
 'use strict';
 var OFFERS_COUNT = 8;
 var numbers = [];
-for (var i = 1; i <= OFFERS_COUNT; i++) {
-  numbers.push('0' + i);
-}
+var createArrNumbers = function () {
+  for (var i = 1; i <= OFFERS_COUNT; i++) {
+    numbers.push('0' + i);
+  }
+};
+createArrNumbers();
 
 var TYPES = ['palace', 'flat', 'house', 'bungalo'];
 var TYPES_MAP = {
@@ -152,7 +155,7 @@ function renderCards(article, index) {
   cardElement.querySelector('.popup__text--address').textContent = article[index].offer.address;
   cardElement.querySelector('.popup__text--price').textContent = article[index].offer.price + ' ₽/ночь';
   cardElement.querySelector('.popup__type').textContent = TYPES_MAP[article[index].offer.type];
-  cardElement.querySelector('.popup__text--capacity').textContent = article[index].offer.rooms + ' комнат' + (article[index].offer.rooms == 1 ? 'а' : 'ы') + ' для ' + article[index].offer.guests + ' гостей';
+  cardElement.querySelector('.popup__text--capacity').textContent = article[index].offer.rooms + ' комнат' + (article[index].offer.rooms === 1 ? 'а' : 'ы') + ' для ' + article[index].offer.guests + ' гост' + (article[index].offer.guests === 1 ? 'я' : 'ей');
   cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + article[index].offer.checkin + ', выезд до ' + article[index].offer.checkout;
   cardElement.querySelector('.popup__description').textContent = article[index].offer.description;
   cardElement.querySelector('.popup__photos').textContent = article[index].offer.description;
@@ -189,28 +192,28 @@ var map = document.querySelector('.map');
 
 inputAddress.value = (mapPinMain.offsetLeft + mapPinMain.offsetWidth / 2) + ', ' + (mapPinMain.offsetTop + mapPinMain.offsetHeight);
 
-for (var i = 0; i < formFilesdsets.length; i++) {
-  formFilesdsets[i].disabled = true;
+for (var l = 0; l < formFilesdsets.length; l++) {
+  formFilesdsets[l].disabled = true;
 }
 
 mapPinMain.addEventListener('mouseup', function () {
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
-  for (var i = 0; i < formFilesdsets.length; i++) {
-    formFilesdsets[i].disabled = false;
+  for (var q = 0; q < formFilesdsets.length; q++) {
+    formFilesdsets[q].disabled = false;
   }
   inputAddress.value = (mapPinMain.offsetLeft + mapPinMain.offsetWidth / 2) + ', ' + (mapPinMain.offsetTop + mapPinMain.offsetHeight / 2 + 22);
   renderPins();
   var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
   var removeCard = function () {
-    for (var j= 0; j < map.childNodes.length; j++) {
+    for (var j = 0; j < map.childNodes.length; j++) {
       if (map.childNodes[j].className === 'map__card popup') {
         map.removeChild(document.querySelector('.map').childNodes[j]);
       }
     }
   };
-  for (var i = 0; i < mapPins.length; i++) {
-    mapPins[i].addEventListener('click', function (evt) {
+  for (var k = 0; k < mapPins.length; k++) {
+    mapPins[k].addEventListener('click', function (evt) {
       var currentEl = evt.currentTarget.getAttribute('data-id');
       removeCard();
       renderCards(result, currentEl);
