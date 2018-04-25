@@ -1,23 +1,23 @@
 'use strict';
-var OFFERS_COUNT = 8;
-var numbers = [];
-var createArrNumbers = function () {
-  for (var i = 1; i <= OFFERS_COUNT; i++) {
-    numbers.push('0' + i);
-  }
-};
-createArrNumbers();
 
-var TYPES = ['palace', 'flat', 'house', 'bungalo'];
+var OFFERS_COUNT = 8;
+var TYPES = [
+  'palace',
+  'flat',
+  'house',
+  'bungalo'
+];
 var TYPES_MAP = {
   palace: 'Дворец',
   flat: 'Квартира',
   house: 'Дом',
   bungalo: 'Бунгало'
 };
-
-var CHECK_TIMES = ['12:00', '13:00', '14:00'];
-
+var CHECK_TIMES = [
+  '12:00',
+  '13:00',
+  '14:00'
+];
 var TITLES = [
   'Большая уютная квартира',
   'Маленькая неуютная квартира',
@@ -28,7 +28,6 @@ var TITLES = [
   'Уютное бунгало далеко от моря',
   'Неуютное бунгало по колено в воде'
 ];
-
 var FEATURES = [
   'wifi',
   'dishwasher',
@@ -37,13 +36,13 @@ var FEATURES = [
   'elevator',
   'conditioner'
 ];
-
 var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 
+var mapObjects = [];
 /**
  *
  * @param {number} min
@@ -89,15 +88,13 @@ function stirArray(arr) {
   return result;
 }
 
-var result = [];
-
-var createMapObj = function () {
+var createMapObject = function (i) {
   var location = {
     x: randomNumber(300, 900),
     y: randomNumber(150, 500)
   };
   return {
-    avatar: 'img/avatars/user' + numbers[i] + '.png',
+    avatar: 'img/avatars/user0' + (i + 1) + '.png',
     offer: {
       title: TITLES[i],
       address: location.x + ', ' + location.y,
@@ -118,8 +115,8 @@ var createMapObj = function () {
   };
 };
 
-for (var i = 0; i < numbers.length; i++) {
-  result.push(createMapObj());
+for (var i = 0; i < OFFERS_COUNT; i++) {
+  mapObjects.push(createMapObject(i));
 }
 
 function renderPins() {
@@ -128,7 +125,7 @@ function renderPins() {
 
   var pinsList = document.createDocumentFragment();
 
-  result.forEach(function (mapCard, index) {
+  mapObjects.forEach(function (mapCard, index) {
     var pinElement = pinTemplate.cloneNode(true);
 
     pinElement.style.left = (mapCard.location.x + pinElement.offsetWidth / 2) + 'px';
@@ -190,33 +187,51 @@ var formFilesdsets = document.querySelectorAll('fieldset');
 var inputAddress = document.getElementById('address');
 var map = document.querySelector('.map');
 
-inputAddress.value = (mapPinMain.offsetLeft + mapPinMain.offsetWidth / 2) + ', ' + (mapPinMain.offsetTop + mapPinMain.offsetHeight);
+var openMap = function () {
+  map.classList.remove('map--faded');
+};
 
-for (var l = 0; l < formFilesdsets.length; l++) {
-  formFilesdsets[l].disabled = true;
-}
+var changeValueInputAdress = function () {
+  if (map.classList.contains('map--faded')) {
+    inputAddress.value = (mapPinMain.offsetLeft + mapPinMain.offsetWidth / 2) + ', ' + (mapPinMain.offsetTop + mapPinMain.offsetHeight / 2 + 22);
+  } else {
+    inputAddress.value = (mapPinMain.offsetLeft + mapPinMain.offsetWidth / 2) + ', ' + (mapPinMain.offsetTop + mapPinMain.offsetHeight);
+  }
+};
+
+var disabledFieldset = function (param) {
+  for (var l = 0; l < formFilesdsets.length; l++) {
+    formFilesdsets[l].disabled = param;
+  }
+};
+
+var enabledAdForm = function () {
+  adForm.classList.remove('ad-form--disabled');
+};
+
+var removeCard = function () {
+  for (var j = 0; j < map.childNodes.length; j++) {
+    if (map.childNodes[j].className === 'map__card popup') {
+      map.removeChild(document.querySelector('.map').childNodes[j]);
+    }
+  }
+};
+
+changeValueInputAdress();
+disabledFieldset(true);
 
 mapPinMain.addEventListener('mouseup', function () {
-  map.classList.remove('map--faded');
-  adForm.classList.remove('ad-form--disabled');
-  for (var q = 0; q < formFilesdsets.length; q++) {
-    formFilesdsets[q].disabled = false;
-  }
-  inputAddress.value = (mapPinMain.offsetLeft + mapPinMain.offsetWidth / 2) + ', ' + (mapPinMain.offsetTop + mapPinMain.offsetHeight / 2 + 22);
+  openMap();
+  enabledAdForm();
+  disabledFieldset(false);
+  changeValueInputAdress();
   renderPins();
   var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-  var removeCard = function () {
-    for (var j = 0; j < map.childNodes.length; j++) {
-      if (map.childNodes[j].className === 'map__card popup') {
-        map.removeChild(document.querySelector('.map').childNodes[j]);
-      }
-    }
-  };
   for (var k = 0; k < mapPins.length; k++) {
     mapPins[k].addEventListener('click', function (evt) {
       var currentEl = evt.currentTarget.getAttribute('data-id');
       removeCard();
-      renderCards(result, currentEl);
+      renderCards(mapObjects, currentEl);
       document.addEventListener('keydown', function (evt2) {
         if (evt2.keyCode === 27) {
           removeCard();
@@ -233,3 +248,53 @@ mapPinMain.addEventListener('mouseup', function () {
   }
 });
 
+
+var formFieldType = document.forms[1].type;
+var formFieldPrice = document.forms[1].price;
+var formFieldTimeIn = document.forms[1].timein;
+var formFieldTimeOut = document.forms[1].timeout;
+var formFieldRooms = document.forms[1].rooms;
+var formFieldCapacity = document.forms[1].capacity;
+
+var changeFieldPriceAttribute = function (price) {
+  formFieldPrice.setAttribute('min', price);
+  formFieldPrice.setAttribute('placeholder', price);
+};
+var onFieldsOfStayChange = function (field1, field2) {
+  field1.addEventListener('change', function () {
+    for (var l = 0; l < field1.options.length; l++) {
+      if (field1.options[l].selected) {
+        field2.options[l].selected = true;
+      }
+    }
+  });
+};
+var onFieldsRoomOrGuestChange = function () {
+  var numberOfRooms = parseInt(formFieldRooms.value, 10);
+  var numberOfGuests = parseInt(formFieldCapacity.value, 10);
+  if (numberOfRooms < numberOfGuests) {
+    formFieldCapacity.setCustomValidity('Количество комнат не соответствует числу гостей');
+  } else if (numberOfRooms === 100 & numberOfGuests !== 0) {
+    formFieldCapacity.setCustomValidity('Так много комнат не для гостей');
+  } else {
+    formFieldCapacity.setCustomValidity('');
+  }
+};
+
+formFieldType.addEventListener('change', function () {
+  if (formFieldType.value === 'bungalo') {
+    changeFieldPriceAttribute(0);
+  } else if (formFieldType.value === 'flat') {
+    changeFieldPriceAttribute(1000);
+  } else if (formFieldType.value === 'house') {
+    changeFieldPriceAttribute(5000);
+  } else if (formFieldType.value === 'palace') {
+    changeFieldPriceAttribute(10000);
+  }
+});
+
+onFieldsOfStayChange(formFieldTimeIn, formFieldTimeOut);
+onFieldsOfStayChange(formFieldTimeOut, formFieldTimeIn);
+
+formFieldRooms.addEventListener('change', onFieldsRoomOrGuestChange);
+formFieldCapacity.addEventListener('change', onFieldsRoomOrGuestChange);
