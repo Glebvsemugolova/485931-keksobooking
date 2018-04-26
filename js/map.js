@@ -13,6 +13,12 @@ var TYPES_MAP = {
   house: 'Дом',
   bungalo: 'Бунгало'
 };
+var PRICES_FOR_HOUSE_TYPES = {
+  palace: 10000,
+  flat: 1000,
+  house: 5000,
+  bungalo: 0
+};
 var CHECK_TIMES = [
   '12:00',
   '13:00',
@@ -220,7 +226,59 @@ var removeCard = function () {
 changeValueInputAdress();
 disabledFieldset(true);
 
-mapPinMain.addEventListener('mouseup', function () {
+var PIN_MAIN_WIDTH = 65;
+var PIN_MAIN_HEIGHT = 65;
+var PIN_MAIN_TAIL = 22;
+
+// limit of drag field location
+var DRAG_LOCATION = {
+  xMin: 65,
+  xMax: 1200,
+  yMin: 150,
+  yMax: 500
+};
+
+mapPinMain.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    var newY = mapPinMain.offsetTop - shift.y;
+    var newX = mapPinMain.offsetLeft - shift.x;
+    if (newY >= DRAG_LOCATION.yMin - PIN_MAIN_HEIGHT && newY <= DRAG_LOCATION.yMax - (PIN_MAIN_HEIGHT + PIN_MAIN_TAIL)
+      && newX >= DRAG_LOCATION.xMin - PIN_MAIN_WIDTH && newX <= DRAG_LOCATION.xMax - PIN_MAIN_WIDTH) {
+      startCoords = {
+        x: moveEvt.clientX,
+        y: moveEvt.clientY
+      };
+
+      mapPinMain.style.top = (mapPinMain.offsetTop - shift.y) + 'px';
+      mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x) + 'px';
+    }
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
+    document.removeEventListener('mousemove', onMouseMove);
+    changeValueInputAdress();
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+});
+
+mapPinMain.addEventListener('mouseup', function onMapPinMainDrop() {
   openMap();
   enabledAdForm();
   disabledFieldset(false);
@@ -246,6 +304,7 @@ mapPinMain.addEventListener('mouseup', function () {
       });
     });
   }
+  mapPinMain.removeEventListener('mouseup', onMapPinMainDrop);
 });
 
 
@@ -282,15 +341,7 @@ var onFieldsRoomOrGuestChange = function () {
 };
 
 formFieldType.addEventListener('change', function () {
-  if (formFieldType.value === 'bungalo') {
-    changeFieldPriceAttribute(0);
-  } else if (formFieldType.value === 'flat') {
-    changeFieldPriceAttribute(1000);
-  } else if (formFieldType.value === 'house') {
-    changeFieldPriceAttribute(5000);
-  } else if (formFieldType.value === 'palace') {
-    changeFieldPriceAttribute(10000);
-  }
+  changeFieldPriceAttribute(PRICES_FOR_HOUSE_TYPES[formFieldType.value]);
 });
 
 onFieldsOfStayChange(formFieldTimeIn, formFieldTimeOut);
