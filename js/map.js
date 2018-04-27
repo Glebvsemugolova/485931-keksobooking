@@ -264,6 +264,7 @@ mapPinMain.addEventListener('mousedown', function (evt) {
 
       mapPinMain.style.top = (mapPinMain.offsetTop - shift.y) + 'px';
       mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x) + 'px';
+      changeValueInputAdress();
     }
   };
 
@@ -271,7 +272,6 @@ mapPinMain.addEventListener('mousedown', function (evt) {
     upEvt.preventDefault();
 
     document.removeEventListener('mousemove', onMouseMove);
-    changeValueInputAdress();
     document.removeEventListener('mouseup', onMouseUp);
   };
   document.addEventListener('mousemove', onMouseMove);
@@ -308,12 +308,12 @@ mapPinMain.addEventListener('mouseup', function onMapPinMainDrop() {
 });
 
 
-var formFieldType = document.forms[1].type;
-var formFieldPrice = document.forms[1].price;
-var formFieldTimeIn = document.forms[1].timein;
-var formFieldTimeOut = document.forms[1].timeout;
-var formFieldRooms = document.forms[1].rooms;
-var formFieldCapacity = document.forms[1].capacity;
+var formFieldType = document.getElementById('type');
+var formFieldPrice = document.getElementById('price');
+var formFieldTimeIn = document.getElementById('timein');
+var formFieldTimeOut = document.getElementById('timeout');
+var formFieldRooms = document.getElementById('room_number');
+var formFieldCapacity = document.getElementById('capacity');
 
 var changeFieldPriceAttribute = function (price) {
   formFieldPrice.setAttribute('min', price);
