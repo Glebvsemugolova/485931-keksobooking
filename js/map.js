@@ -12,19 +12,23 @@
   };
 
   var mapPinMain = document.querySelector('.map__pin--main');
-  var adForm = document.querySelector('.ad-form');
+  window.adForm = document.querySelector('.ad-form');
   var formFilesdsets = document.querySelectorAll('fieldset');
   var inputAddress = document.getElementById('address');
-  var map = document.querySelector('.map');
+  window.map = document.querySelector('.map');
 
   // делает карту активной
   var openMap = function () {
-    map.classList.remove('map--faded');
+    window.map.classList.remove('map--faded');
+  };
+
+  window.closeMap = function () {
+    window.map.classList.add('map--faded');
   };
 
   // меняет значение в поле адресс в зависимости от активности карты
-  var changeValueInputAdress = function () {
-    if (map.classList.contains('map--faded')) {
+  window.changeValueInputAdress = function () {
+    if (window.map.classList.contains('map--faded')) {
       inputAddress.value = (mapPinMain.offsetLeft + mapPinMain.offsetWidth / 2) + ', ' + (mapPinMain.offsetTop + mapPinMain.offsetHeight / 2 + 22);
     } else {
       inputAddress.value = (mapPinMain.offsetLeft + mapPinMain.offsetWidth / 2) + ', ' + (mapPinMain.offsetTop + mapPinMain.offsetHeight);
@@ -40,14 +44,14 @@
 
   // включает возможность редактирования формы
   var enabledAdForm = function () {
-    adForm.classList.remove('ad-form--disabled');
+    window.adForm.classList.remove('ad-form--disabled');
   };
 
   // зыкрывает(удаляет) объявление о недвижимости, если оно открыто(отрисовано)
   var removeCard = function () {
-    for (var j = 0; j < map.childNodes.length; j++) {
-      if (map.childNodes[j].className === 'map__card popup') {
-        map.removeChild(document.querySelector('.map').childNodes[j]);
+    for (var j = 0; j < window.map.childNodes.length; j++) {
+      if (window.map.childNodes[j].className === 'map__card popup') {
+        window.map.removeChild(document.querySelector('.map').childNodes[j]);
       }
     }
   };
@@ -63,7 +67,7 @@
     }
   };
 
-  changeValueInputAdress();
+  window.changeValueInputAdress();
   disabledFieldset(true);
 
   // обработчик события на нажатие на главную метку
@@ -93,7 +97,7 @@
 
         mapPinMain.style.top = (mapPinMain.offsetTop - shift.y) + 'px';
         mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x) + 'px';
-        changeValueInputAdress();
+        window.changeValueInputAdress();
       }
     };
 
@@ -120,7 +124,7 @@
         removeCard();
         window.renderCard(window.mapObjects, currentEl);
         document.addEventListener('keydown', onPopupEscPress);
-        var buttonPopupClose = map.querySelector('.popup__close');
+        var buttonPopupClose = window.map.querySelector('.popup__close');
         buttonPopupClose.addEventListener('click', removeCard);
         buttonPopupClose.addEventListener('keydown', onPopupButtonClosePress);
       });
