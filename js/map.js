@@ -115,7 +115,7 @@
     openMap();
     enabledAdForm();
     disabledFieldset(false);
-    changeValueInputAdress();
+    window.changeValueInputAdress();
     window.renderPins();
     var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
     for (var k = 0; k < mapPins.length; k++) {
