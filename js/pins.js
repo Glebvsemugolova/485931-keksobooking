@@ -11,7 +11,7 @@
 
       pinElement.style.left = (mapCard.location.x + pinElement.offsetWidth / 2) + 'px';
       pinElement.style.top = (mapCard.location.y - pinElement.offsetHeight) + 'px';
-      pinElement.querySelector('img').src = mapCard.avatar;
+      pinElement.querySelector('img').src = mapCard.author.avatar;
       pinElement.querySelector('img').alt = mapCard.offer.title;
       pinElement.setAttribute('data-id', index);
 

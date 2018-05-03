@@ -14,6 +14,34 @@
   var formFieldTimeOut = document.getElementById('timeout');
   var formFieldRooms = document.getElementById('room_number');
   var formFieldCapacity = document.getElementById('capacity');
+  var successUploadPopup = document.querySelector('.success');
+  var errorUploadPopup = document.querySelector('.error');
+
+  // действия при успешном/неуспешном запросе на отправку данных на сервер
+  var showUploadPopup = function (popup) {
+    popup.classList.remove('hidden');
+  };
+  var hideUploadPopup = function (popup) {
+    setTimeout(function () {
+      popup.classList.add('hidden');
+    }, 3000);
+  };
+  var formSuccessHandler = function () {
+    showUploadPopup(successUploadPopup);
+    window.closeMap();
+    window.adForm.reset();
+    window.changeValueInputAdress();
+    hideUploadPopup(successUploadPopup);
+  };
+  var formErrorHandler = function () {
+    showUploadPopup(errorUploadPopup);
+    hideUploadPopup(errorUploadPopup);
+  };
+
+  window.adForm.addEventListener('submit', function (evt) {
+    window.upload(new FormData(window.adForm), formSuccessHandler, formErrorHandler);
+    evt.preventDefault();
+  });
 
   // меняет значение поля цена в зависимоти от выбранного типа недвижимости
   var changeFieldPriceAttribute = function (price) {
