@@ -24,6 +24,8 @@
 
   window.closeMap = function () {
     window.map.classList.add('map--faded');
+    mapPinMain.style.left = '570px';
+    mapPinMain.style.top = '375px';
   };
 
   // меняет значение в поле адресс в зависимости от активности карты
@@ -48,7 +50,7 @@
   };
 
   // зыкрывает(удаляет) объявление о недвижимости, если оно открыто(отрисовано)
-  var removeCard = function () {
+  window.removeCard = function () {
     for (var j = 0; j < window.map.childNodes.length; j++) {
       if (window.map.childNodes[j].className === 'map__card popup') {
         window.map.removeChild(document.querySelector('.map').childNodes[j]);
@@ -58,17 +60,28 @@
 
   var onPopupEscPress = function (evt) {
     if (evt.keyCode === 27) {
-      removeCard();
+      window.removeCard();
     }
   };
   var onPopupButtonClosePress = function (evt) {
     if (evt.keyCode === 13) {
-      removeCard();
+      window.removeCard();
     }
   };
-
-  window.changeValueInputAdress();
-  disabledFieldset(true);
+  window.listenToPins = function () {
+    var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    for (var k = 0; k < mapPins.length; k++) {
+      mapPins[k].addEventListener('click', function (evt) {
+        var currentEl = evt.currentTarget.getAttribute('data-id');
+        window.removeCard();
+        window.renderCard((window.filteredMapObjects || window.mapObjects), currentEl);
+        document.addEventListener('keydown', onPopupEscPress);
+        var buttonPopupClose = window.map.querySelector('.popup__close');
+        buttonPopupClose.addEventListener('click', window.removeCard);
+        buttonPopupClose.addEventListener('keydown', onPopupButtonClosePress);
+      });
+    }
+  };
 
   // обработчик события на нажатие на главную метку
   mapPinMain.addEventListener('mousedown', function (evt) {
@@ -110,26 +123,22 @@
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
-
-  mapPinMain.addEventListener('mouseup', function onMapPinMainDrop() {
+  var onMapPinMainDrop = function () {
     openMap();
     enabledAdForm();
     disabledFieldset(false);
     window.changeValueInputAdress();
     window.renderPins();
-    var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-    for (var k = 0; k < mapPins.length; k++) {
-      mapPins[k].addEventListener('click', function (evt) {
-        var currentEl = evt.currentTarget.getAttribute('data-id');
-        removeCard();
-        window.renderCard(window.mapObjects, currentEl);
-        document.addEventListener('keydown', onPopupEscPress);
-        var buttonPopupClose = window.map.querySelector('.popup__close');
-        buttonPopupClose.addEventListener('click', removeCard);
-        buttonPopupClose.addEventListener('keydown', onPopupButtonClosePress);
-      });
+    window.listenToPins();
+  };
+
+  window.changeValueInputAdress();
+  disabledFieldset(true);
+  mapPinMain.addEventListener('mouseup', onMapPinMainDrop);
+  mapPinMain.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === 13) {
+      onMapPinMainDrop();
     }
-    mapPinMain.removeEventListener('mouseup', onMapPinMainDrop);
   });
 })();
 

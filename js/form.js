@@ -16,6 +16,15 @@
   var formFieldCapacity = document.getElementById('capacity');
   var successUploadPopup = document.querySelector('.success');
   var errorUploadPopup = document.querySelector('.error');
+  var formReset = document.querySelector('.ad-form__reset');
+
+  formReset.addEventListener('click', function (evt) {
+    evt.preventDefault();
+    window.closeMap();
+    window.removePins();
+    window.adForm.reset();
+    window.changeValueInputAdress();
+  });
 
   // действия при успешном/неуспешном запросе на отправку данных на сервер
   var showUploadPopup = function (popup) {
@@ -29,6 +38,7 @@
   var formSuccessHandler = function () {
     showUploadPopup(successUploadPopup);
     window.closeMap();
+    window.removePins();
     window.adForm.reset();
     window.changeValueInputAdress();
     hideUploadPopup(successUploadPopup);
@@ -60,16 +70,64 @@
     });
   };
 
-  // Устанавливает взаимоограничения на поля с выбором кол-ва госте и кол-ва комнат
-  var onFieldsRoomOrGuestChange = function () {
-    var numberOfRooms = parseInt(formFieldRooms.value, 10);
-    var numberOfGuests = parseInt(formFieldCapacity.value, 10);
-    if (numberOfRooms < numberOfGuests) {
-      formFieldCapacity.setCustomValidity('Количество комнат не соответствует числу гостей');
-    } else if (numberOfRooms === 100 & numberOfGuests !== 0) {
-      formFieldCapacity.setCustomValidity('Так много комнат не для гостей');
-    } else {
-      formFieldCapacity.setCustomValidity('');
+  // Устанавливает ограничения на поле с выбором кол-ва гостей в зависимости от выбора кол-ва комнат
+  var onFieldRoomsChange = function () {
+    var roomNumberSel = formFieldRooms.options[formFieldRooms.selectedIndex].value;
+    if (roomNumberSel === '1') {
+      formFieldCapacity.options[0].disabled = true;
+      formFieldCapacity.options[1].disabled = true;
+      formFieldCapacity.options[2].selected = true;
+      formFieldCapacity.options[2].disabled = false;
+      formFieldCapacity.options[3].disabled = true;
+    } else if (roomNumberSel === '2') {
+      formFieldCapacity.options[0].disabled = true;
+      formFieldCapacity.options[1].selected = true;
+      formFieldCapacity.options[1].disabled = false;
+      formFieldCapacity.options[2].disabled = false;
+      formFieldCapacity.options[3].disabled = true;
+    } else if (roomNumberSel === '3') {
+      formFieldCapacity.options[0].selected = true;
+      formFieldCapacity.options[0].disabled = false;
+      formFieldCapacity.options[1].disabled = false;
+      formFieldCapacity.options[2].disabled = false;
+      formFieldCapacity.options[3].disabled = true;
+    } else if (roomNumberSel === '100') {
+      formFieldCapacity.options[0].disabled = true;
+      formFieldCapacity.options[1].disabled = true;
+      formFieldCapacity.options[2].disabled = true;
+      formFieldCapacity.options[3].disabled = false;
+      formFieldCapacity.options[3].selected = true;
+    }
+  };
+
+  // Устанавливает ограничения на поле с выбором кол-ва комнат в зависимости от выбора кол-ва гостей
+  var onFieldCapacityChange = function () {
+    var capacitySel = formFieldCapacity.options[formFieldCapacity.selectedIndex].value;
+
+    if (capacitySel === '3') {
+      formFieldRooms.options[0].disabled = true;
+      formFieldRooms.options[1].disabled = true;
+      formFieldRooms.options[2].selected = true;
+      formFieldRooms.options[2].disabled = false;
+      formFieldRooms.options[3].disabled = true;
+    } else if (capacitySel === '2') {
+      formFieldRooms.options[0].disabled = true;
+      formFieldRooms.options[1].disabled = false;
+      formFieldRooms.options[2].selected = true;
+      formFieldRooms.options[2].disabled = false;
+      formFieldRooms.options[3].disabled = true;
+    } else if (capacitySel === '1') {
+      formFieldRooms.options[0].disabled = false;
+      formFieldRooms.options[1].selected = true;
+      formFieldRooms.options[1].disabled = false;
+      formFieldRooms.options[2].disabled = true;
+      formFieldRooms.options[3].disabled = true;
+    } else if (capacitySel === '0') {
+      formFieldRooms.options[0].disabled = true;
+      formFieldRooms.options[1].disabled = true;
+      formFieldRooms.options[2].disabled = true;
+      formFieldRooms.options[3].selected = true;
+      formFieldRooms.options[3].disabled = false;
     }
   };
 
@@ -79,9 +137,8 @@
 
   onFieldsOfStayChange(formFieldTimeIn, formFieldTimeOut);
   onFieldsOfStayChange(formFieldTimeOut, formFieldTimeIn);
-
-  formFieldRooms.addEventListener('change', onFieldsRoomOrGuestChange);
-  formFieldCapacity.addEventListener('change', onFieldsRoomOrGuestChange);
+  formFieldRooms.addEventListener('change', onFieldRoomsChange);
+  formFieldCapacity.addEventListener('change', onFieldCapacityChange);
 })();
 
 
