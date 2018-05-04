@@ -42,6 +42,7 @@
     window.adForm.reset();
     window.changeValueInputAdress();
     hideUploadPopup(successUploadPopup);
+    mapFilters.reset();
   };
   var formErrorHandler = function () {
     showUploadPopup(errorUploadPopup);
@@ -131,6 +132,14 @@
     }
   };
 
+  window.mapFilter = {
+    features: [],
+    type: null,
+    price: null,
+    rooms: null,
+    guests: null
+  };
+
   formFieldType.addEventListener('change', function () {
     changeFieldPriceAttribute(PRICES_FOR_HOUSE_TYPES[formFieldType.value]);
   });
@@ -139,6 +148,31 @@
   onFieldsOfStayChange(formFieldTimeOut, formFieldTimeIn);
   formFieldRooms.addEventListener('change', onFieldRoomsChange);
   formFieldCapacity.addEventListener('change', onFieldCapacityChange);
+
+  var mapFilters = document.querySelector('.map__filters');
+  mapFilters.addEventListener('change', function (evt) {
+    if (evt.target.nodeName === 'INPUT') {
+      if (evt.target.checked) {
+        window.mapFilter.features.push(evt.target.value);
+        window.removePins();
+        window.updatePins();
+      } else {
+        window.mapFilter.features = window.mapFilter.features.filter(function (filter) {
+          return filter !== evt.target.value;
+        });
+        window.removePins();
+        window.updatePins();
+      }
+    }
+    if (evt.target.nodeName === 'SELECT') {
+      window.mapFilter[evt.target.id.replace(/housing-/, '')] = evt.target.options[evt.target.selectedIndex].value;
+
+      window.removePins();
+      window.updatePins();
+      // console.log(evt.target.options[evt.target.selectedIndex].value);
+    }
+    console.log(window.mapFilter);
+  });
 })();
 
 

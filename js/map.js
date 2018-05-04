@@ -31,7 +31,9 @@
   // меняет значение в поле адресс в зависимости от активности карты
   window.changeValueInputAdress = function () {
     if (window.map.classList.contains('map--faded')) {
+      console.log(inputAddress.value);
       inputAddress.value = (mapPinMain.offsetLeft + mapPinMain.offsetWidth / 2) + ', ' + (mapPinMain.offsetTop + mapPinMain.offsetHeight / 2 + 22);
+      console.log(inputAddress.value);
     } else {
       inputAddress.value = (mapPinMain.offsetLeft + mapPinMain.offsetWidth / 2) + ', ' + (mapPinMain.offsetTop + mapPinMain.offsetHeight);
     }
@@ -74,7 +76,7 @@
       mapPins[k].addEventListener('click', function (evt) {
         var currentEl = evt.currentTarget.getAttribute('data-id');
         window.removeCard();
-        window.renderCard((window.filteredMapObjects || window.mapObjects), currentEl);
+        window.renderCard((window.pins || window.filteredMapObjects || window.mapObjects), currentEl);
         document.addEventListener('keydown', onPopupEscPress);
         var buttonPopupClose = window.map.querySelector('.popup__close');
         buttonPopupClose.addEventListener('click', window.removeCard);
@@ -82,6 +84,9 @@
       });
     }
   };
+
+  window.changeValueInputAdress();
+  disabledFieldset(true);
 
   // обработчик события на нажатие на главную метку
   mapPinMain.addEventListener('mousedown', function (evt) {
@@ -132,9 +137,8 @@
     window.listenToPins();
   };
 
-  window.changeValueInputAdress();
-  disabledFieldset(true);
   mapPinMain.addEventListener('mouseup', onMapPinMainDrop);
+
   mapPinMain.addEventListener('keydown', function (evt) {
     if (evt.keyCode === 13) {
       onMapPinMainDrop();
