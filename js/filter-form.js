@@ -29,6 +29,6 @@
 
       window.removePins();
       window.updatePins();
-    };
+    }
   });
 })();
