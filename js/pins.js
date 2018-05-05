@@ -17,13 +17,14 @@
   window.renderPins = function () {
     var pinTemplate = document.querySelector('#map-card-template').content.querySelector('.map__pin');
     var pinsList = document.createDocumentFragment();
-    window.mapObjectsNow = window.filteredMapObjects || window.mapObjects.slice(5);
+    window.mapObjectsNow = window.filteredMapObjects || window.mapObjects.slice(0, 5);
 
     window.mapObjectsNow.forEach(function (mapCard, index) {
       var pinElement = pinTemplate.cloneNode(true);
+      var pinImg = pinTemplate.querySelector('img');
 
-      pinElement.style.left = (mapCard.location.x + pinElement.offsetWidth / 2) + 'px';
-      pinElement.style.top = (mapCard.location.y - pinElement.offsetHeight) + 'px';
+      pinElement.style.left = (mapCard.location.x - pinImg.offsetWidth / 2) + 'px';
+      pinElement.style.top = (mapCard.location.y - pinImg.offsetHeight) + 'px';
       pinElement.querySelector('img').src = mapCard.author.avatar;
       pinElement.querySelector('img').alt = mapCard.offer.title;
       pinElement.setAttribute('data-id', index);
