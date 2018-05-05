@@ -102,37 +102,6 @@
     }
   };
 
-  // Устанавливает ограничения на поле с выбором кол-ва комнат в зависимости от выбора кол-ва гостей
-  var onFieldCapacityChange = function () {
-    var capacitySel = formFieldCapacity.options[formFieldCapacity.selectedIndex].value;
-
-    if (capacitySel === '3') {
-      formFieldRooms.options[0].disabled = true;
-      formFieldRooms.options[1].disabled = true;
-      formFieldRooms.options[2].selected = true;
-      formFieldRooms.options[2].disabled = false;
-      formFieldRooms.options[3].disabled = true;
-    } else if (capacitySel === '2') {
-      formFieldRooms.options[0].disabled = true;
-      formFieldRooms.options[1].disabled = false;
-      formFieldRooms.options[2].selected = true;
-      formFieldRooms.options[2].disabled = false;
-      formFieldRooms.options[3].disabled = true;
-    } else if (capacitySel === '1') {
-      formFieldRooms.options[0].disabled = false;
-      formFieldRooms.options[1].selected = true;
-      formFieldRooms.options[1].disabled = false;
-      formFieldRooms.options[2].disabled = true;
-      formFieldRooms.options[3].disabled = true;
-    } else if (capacitySel === '0') {
-      formFieldRooms.options[0].disabled = true;
-      formFieldRooms.options[1].disabled = true;
-      formFieldRooms.options[2].disabled = true;
-      formFieldRooms.options[3].selected = true;
-      formFieldRooms.options[3].disabled = false;
-    }
-  };
-
   window.adForm.addEventListener('submit', function (evt) {
     window.upload(new FormData(window.adForm), onFormSuccessSubmit, onFormErrorSubmit);
     evt.preventDefault();
@@ -144,8 +113,8 @@
 
   onFieldsOfStayChange(formFieldTimeIn, formFieldTimeOut);
   onFieldsOfStayChange(formFieldTimeOut, formFieldTimeIn);
+  onFieldRoomsChange();
   formFieldRooms.addEventListener('change', onFieldRoomsChange);
-  formFieldCapacity.addEventListener('change', onFieldCapacityChange);
 })();
 
 
