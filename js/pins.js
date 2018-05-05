@@ -1,13 +1,25 @@
 'use strict';
 
 (function () {
+  var priceHelpers = {
+    low: function (value) {
+      return value <= 10000;
+    },
+    middle: function (value) {
+      return value > 10000 && value <= 50000;
+    },
+    high: function (value) {
+      return value > 50000;
+    }
+  };
+
   // отрисовывает метки похожих объявлений на карте
   window.renderPins = function () {
     var pinTemplate = document.querySelector('#map-card-template').content.querySelector('.map__pin');
     var pinsList = document.createDocumentFragment();
-    window.pins = window.filteredMapObjects || window.mapObjects.slice(5);
+    window.mapObjectsNow = window.filteredMapObjects || window.mapObjects.slice(5);
 
-    window.pins.forEach(function (mapCard, index) {
+    window.mapObjectsNow.forEach(function (mapCard, index) {
       var pinElement = pinTemplate.cloneNode(true);
 
       pinElement.style.left = (mapCard.location.x + pinElement.offsetWidth / 2) + 'px';
@@ -66,18 +78,6 @@
     var buttons = document.querySelectorAll('.map__pins button[type="button"]');
     for (var i = 0; i < buttons.length; i++) {
       document.querySelector('.map__pins').removeChild(buttons[i]);
-    }
-  };
-
-  var priceHelpers = {
-    low: function (value) {
-      return value <= 10000;
-    },
-    middle: function (value) {
-      return value > 10000 && value <= 50000;
-    },
-    high: function (value) {
-      return value > 50000;
     }
   };
 })();

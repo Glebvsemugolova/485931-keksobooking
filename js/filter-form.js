@@ -9,12 +9,12 @@
     guests: null
   };
 
-  var mapFilters = document.querySelector('.map__filters');
-  mapFilters.addEventListener('change', function (evt) {
+  var filterForm = document.querySelector('.map__filters');
+
+  filterForm.addEventListener('change', function (evt) {
     if (evt.target.nodeName === 'INPUT') {
       if (evt.target.checked) {
         window.mapFilter.features.push(evt.target.value);
-        window.removePins();
         window.updatePins();
       } else {
         window.mapFilter.features = window.mapFilter.features.filter(function (filter) {

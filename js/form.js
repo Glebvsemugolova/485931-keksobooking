@@ -8,6 +8,14 @@
     bungalo: 0
   };
 
+  window.mapFilter = {
+    features: [],
+    type: null,
+    price: null,
+    rooms: null,
+    guests: null
+  };
+
   var formFieldType = document.getElementById('type');
   var formFieldPrice = document.getElementById('price');
   var formFieldTimeIn = document.getElementById('timein');
@@ -17,6 +25,7 @@
   var successUploadPopup = document.querySelector('.success');
   var errorUploadPopup = document.querySelector('.error');
   var formReset = document.querySelector('.ad-form__reset');
+  var filterForm = document.querySelector('.map__filters');
 
   formReset.addEventListener('click', function (evt) {
     evt.preventDefault();
@@ -31,11 +40,13 @@
   var showUploadPopup = function (popup) {
     popup.classList.remove('hidden');
   };
+
   var hideUploadPopup = function (popup) {
     setTimeout(function () {
       popup.classList.add('hidden');
     }, 3000);
   };
+
   var formSuccessHandler = function () {
     showUploadPopup(successUploadPopup);
     window.removeCard();
@@ -44,17 +55,13 @@
     window.adForm.reset();
     window.changeValueInputAdress();
     hideUploadPopup(successUploadPopup);
-    mapFilters.reset();
+    filterForm.reset();
   };
+
   var formErrorHandler = function () {
     showUploadPopup(errorUploadPopup);
     hideUploadPopup(errorUploadPopup);
   };
-
-  window.adForm.addEventListener('submit', function (evt) {
-    window.upload(new FormData(window.adForm), formSuccessHandler, formErrorHandler);
-    evt.preventDefault();
-  });
 
   // меняет значение поля цена в зависимоти от выбранного типа недвижимости
   var changeFieldPriceAttribute = function (price) {
@@ -134,13 +141,10 @@
     }
   };
 
-  window.mapFilter = {
-    features: [],
-    type: null,
-    price: null,
-    rooms: null,
-    guests: null
-  };
+  window.adForm.addEventListener('submit', function (evt) {
+    window.upload(new FormData(window.adForm), formSuccessHandler, formErrorHandler);
+    evt.preventDefault();
+  });
 
   formFieldType.addEventListener('change', function () {
     changeFieldPriceAttribute(PRICES_FOR_HOUSE_TYPES[formFieldType.value]);
@@ -150,30 +154,6 @@
   onFieldsOfStayChange(formFieldTimeOut, formFieldTimeIn);
   formFieldRooms.addEventListener('change', onFieldRoomsChange);
   formFieldCapacity.addEventListener('change', onFieldCapacityChange);
-
-  var mapFilters = document.querySelector('.map__filters');
-  mapFilters.addEventListener('change', function (evt) {
-    if (evt.target.nodeName === 'INPUT') {
-      if (evt.target.checked) {
-        window.mapFilter.features.push(evt.target.value);
-        // window.removePins();
-        window.updatePins();
-      } else {
-        window.mapFilter.features = window.mapFilter.features.filter(function (filter) {
-          return filter !== evt.target.value;
-        });
-        window.removePins();
-        window.updatePins();
-      }
-    }
-    if (evt.target.nodeName === 'SELECT') {
-      window.mapFilter[evt.target.id.replace(/housing-/, '')] = evt.target.options[evt.target.selectedIndex].value;
-
-      window.removePins();
-      window.updatePins();
-      // console.log(evt.target.options[evt.target.selectedIndex].value);
-    }
-  });
 })();
 
 

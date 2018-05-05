@@ -63,18 +63,20 @@
       window.removeCard();
     }
   };
+
   var onPopupButtonClosePress = function (evt) {
     if (evt.keyCode === 13) {
       window.removeCard();
     }
   };
+
   window.listenToPins = function () {
     var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
     for (var k = 0; k < mapPins.length; k++) {
       mapPins[k].addEventListener('click', function (evt) {
         var currentEl = evt.currentTarget.getAttribute('data-id');
         window.removeCard();
-        window.renderCard((window.pins || window.filteredMapObjects || window.mapObjects), currentEl);
+        window.renderCard((window.mapObjectsNow || window.filteredMapObjects || window.mapObjects), currentEl);
         document.addEventListener('keydown', onPopupEscPress);
         var buttonPopupClose = window.map.querySelector('.popup__close');
         buttonPopupClose.addEventListener('click', window.removeCard);
@@ -82,9 +84,6 @@
       });
     }
   };
-
-  window.changeValueInputAdress();
-  disabledFieldset(true);
 
   // обработчик события на нажатие на главную метку
   mapPinMain.addEventListener('mousedown', function (evt) {
@@ -126,6 +125,7 @@
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
+
   var onMapPinMainDrop = function () {
     openMap();
     enabledAdForm();
@@ -137,11 +137,13 @@
   };
 
   mapPinMain.addEventListener('mouseup', onMapPinMainDrop);
-
   mapPinMain.addEventListener('keydown', function (evt) {
     if (evt.keyCode === 13) {
       onMapPinMainDrop();
     }
   });
+
+  window.changeValueInputAdress();
+  disabledFieldset(true);
 })();
 

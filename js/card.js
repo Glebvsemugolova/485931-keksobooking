@@ -22,7 +22,6 @@
     node.textContent = errorMessage;
     window.map.insertAdjacentElement('afterbegin', node);
   };
-  window.load(successHandler, errorHandler);
 
   // отрисовывает объявление об имуществе соответствующее нажатой метке на карте
   window.renderCard = function (article, index) {
@@ -62,5 +61,6 @@
     document.querySelector('.map').insertBefore(cardsList, document.querySelector('.map__filters-container'));
   };
 
+  window.load(successHandler, errorHandler);
 })();
 
