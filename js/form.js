@@ -20,6 +20,7 @@
 
   formReset.addEventListener('click', function (evt) {
     evt.preventDefault();
+    window.removeCard();
     window.closeMap();
     window.removePins();
     window.adForm.reset();
@@ -37,6 +38,7 @@
   };
   var formSuccessHandler = function () {
     showUploadPopup(successUploadPopup);
+    window.removeCard();
     window.closeMap();
     window.removePins();
     window.adForm.reset();
@@ -154,7 +156,7 @@
     if (evt.target.nodeName === 'INPUT') {
       if (evt.target.checked) {
         window.mapFilter.features.push(evt.target.value);
-        window.removePins();
+        // window.removePins();
         window.updatePins();
       } else {
         window.mapFilter.features = window.mapFilter.features.filter(function (filter) {
@@ -171,7 +173,6 @@
       window.updatePins();
       // console.log(evt.target.options[evt.target.selectedIndex].value);
     }
-    console.log(window.mapFilter);
   });
 })();
 

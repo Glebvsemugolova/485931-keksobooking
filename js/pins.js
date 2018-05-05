@@ -7,8 +7,6 @@
     var pinsList = document.createDocumentFragment();
     window.pins = window.filteredMapObjects || window.mapObjects;
 
-
-    // console.log(pins.length);
     if (window.pins.length > 5) {
       window.pins = (window.filteredMapObjects || window.mapObjects).slice(-(window.pins.length - 5));
     }
@@ -37,6 +35,7 @@
         checks.push(window.mapFilter.features.every(function (filter) {
           return mapCard.offer.features.includes(filter);
         }));
+        console.log(window.mapFilter);
       }
 
       if (window.mapFilter.type &&

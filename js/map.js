@@ -31,9 +31,7 @@
   // меняет значение в поле адресс в зависимости от активности карты
   window.changeValueInputAdress = function () {
     if (window.map.classList.contains('map--faded')) {
-      console.log(inputAddress.value);
       inputAddress.value = (mapPinMain.offsetLeft + mapPinMain.offsetWidth / 2) + ', ' + (mapPinMain.offsetTop + mapPinMain.offsetHeight / 2 + 22);
-      console.log(inputAddress.value);
     } else {
       inputAddress.value = (mapPinMain.offsetLeft + mapPinMain.offsetWidth / 2) + ', ' + (mapPinMain.offsetTop + mapPinMain.offsetHeight);
     }
