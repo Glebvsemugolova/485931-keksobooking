@@ -72,10 +72,6 @@
     });
   };
 
-  var mapaHuyppa = [
-    {}
-  ];
-
   // Устанавливает ограничения на поле с выбором кол-ва гостей в зависимости от выбора кол-ва комнат
   var onFieldRoomsChange = function () {
     var roomNumberSel = formFieldRooms.options[formFieldRooms.selectedIndex].value;
