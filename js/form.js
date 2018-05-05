@@ -8,14 +8,6 @@
     bungalo: 0
   };
 
-  window.mapFilter = {
-    features: [],
-    type: null,
-    price: null,
-    rooms: null,
-    guests: null
-  };
-
   var formFieldType = document.getElementById('type');
   var formFieldPrice = document.getElementById('price');
   var formFieldTimeIn = document.getElementById('timein');
@@ -24,10 +16,10 @@
   var formFieldCapacity = document.getElementById('capacity');
   var successUploadPopup = document.querySelector('.success');
   var errorUploadPopup = document.querySelector('.error');
-  var formReset = document.querySelector('.ad-form__reset');
+  var formResetButton = document.querySelector('.ad-form__reset');
   var filterForm = document.querySelector('.map__filters');
 
-  formReset.addEventListener('click', function (evt) {
+  formResetButton.addEventListener('click', function (evt) {
     evt.preventDefault();
     window.removeCard();
     window.closeMap();
@@ -47,7 +39,7 @@
     }, 3000);
   };
 
-  var formSuccessHandler = function () {
+  var onFormSuccessSubmit = function () {
     showUploadPopup(successUploadPopup);
     window.removeCard();
     window.closeMap();
@@ -58,7 +50,7 @@
     filterForm.reset();
   };
 
-  var formErrorHandler = function () {
+  var onFormErrorSubmit = function () {
     showUploadPopup(errorUploadPopup);
     hideUploadPopup(errorUploadPopup);
   };
@@ -142,7 +134,7 @@
   };
 
   window.adForm.addEventListener('submit', function (evt) {
-    window.upload(new FormData(window.adForm), formSuccessHandler, formErrorHandler);
+    window.upload(new FormData(window.adForm), onFormSuccessSubmit, onFormErrorSubmit);
     evt.preventDefault();
   });
 

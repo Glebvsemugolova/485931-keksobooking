@@ -8,11 +8,11 @@
     bungalo: 'Бунгало'
   };
 
-  var successHandler = function (arr) {
+  var onDataSuccessLoad = function (arr) {
     window.mapObjects = arr;
   };
 
-  var errorHandler = function (errorMessage) {
+  var onDataErrorLoad = function (errorMessage) {
     var node = document.createElement('div');
     node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
     node.style.position = 'absolute';
@@ -61,6 +61,6 @@
     document.querySelector('.map').insertBefore(cardsList, document.querySelector('.map__filters-container'));
   };
 
-  window.load(successHandler, errorHandler);
+  window.load(onDataSuccessLoad, onDataErrorLoad);
 })();
 

@@ -20,14 +20,11 @@
         window.mapFilter.features = window.mapFilter.features.filter(function (filter) {
           return filter !== evt.target.value;
         });
-        window.removePins();
         window.updatePins();
       }
     }
     if (evt.target.nodeName === 'SELECT') {
       window.mapFilter[evt.target.id.replace(/housing-/, '')] = evt.target.options[evt.target.selectedIndex].value;
-
-      window.removePins();
       window.updatePins();
     }
   });

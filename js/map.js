@@ -38,14 +38,14 @@
   };
 
   // активириует или дезактивирует разделы полей в зависимоти от param = true или false
-  var disabledFieldset = function (param) {
+  var disableFieldset = function (param) {
     for (var l = 0; l < formFilesdsets.length; l++) {
       formFilesdsets[l].disabled = param;
     }
   };
 
   // включает возможность редактирования формы
-  var enabledAdForm = function () {
+  var enableAdForm = function () {
     window.adForm.classList.remove('ad-form--disabled');
   };
 
@@ -128,8 +128,8 @@
 
   var onMapPinMainDrop = function () {
     openMap();
-    enabledAdForm();
-    disabledFieldset(false);
+    enableAdForm();
+    disableFieldset(false);
     window.changeValueInputAdress();
     window.filteredMapObjects = null;
     window.renderPins();
@@ -144,6 +144,6 @@
   });
 
   window.changeValueInputAdress();
-  disabledFieldset(true);
+  disableFieldset(true);
 })();
 
