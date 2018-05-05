@@ -8,11 +8,11 @@
     bungalo: 'Бунгало'
   };
 
-  var successHandler = function (arr) {
+  var onDataSuccessLoad = function (arr) {
     window.mapObjects = arr;
   };
 
-  var errorHandler = function (errorMessage) {
+  var onDataErrorLoad = function (errorMessage) {
     var node = document.createElement('div');
     node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
     node.style.position = 'absolute';
@@ -22,7 +22,6 @@
     node.textContent = errorMessage;
     window.map.insertAdjacentElement('afterbegin', node);
   };
-  window.load(successHandler, errorHandler);
 
   // отрисовывает объявление об имуществе соответствующее нажатой метке на карте
   window.renderCard = function (article, index) {
@@ -59,9 +58,9 @@
     });
 
     cardsList.appendChild(cardElement);
-
     document.querySelector('.map').insertBefore(cardsList, document.querySelector('.map__filters-container'));
   };
 
+  window.load(onDataSuccessLoad, onDataErrorLoad);
 })();
 

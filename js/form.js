@@ -16,32 +16,44 @@
   var formFieldCapacity = document.getElementById('capacity');
   var successUploadPopup = document.querySelector('.success');
   var errorUploadPopup = document.querySelector('.error');
+  var formResetButton = document.querySelector('.ad-form__reset');
+  var filterForm = document.querySelector('.map__filters');
+
+  formResetButton.addEventListener('click', function (evt) {
+    evt.preventDefault();
+    window.removeCard();
+    window.closeMap();
+    window.removePins();
+    window.adForm.reset();
+    window.changeValueInputAdress();
+  });
 
   // действия при успешном/неуспешном запросе на отправку данных на сервер
   var showUploadPopup = function (popup) {
     popup.classList.remove('hidden');
   };
+
   var hideUploadPopup = function (popup) {
     setTimeout(function () {
       popup.classList.add('hidden');
     }, 3000);
   };
-  var formSuccessHandler = function () {
+
+  var onFormSuccessSubmit = function () {
     showUploadPopup(successUploadPopup);
+    window.removeCard();
     window.closeMap();
+    window.removePins();
     window.adForm.reset();
     window.changeValueInputAdress();
     hideUploadPopup(successUploadPopup);
+    filterForm.reset();
   };
-  var formErrorHandler = function () {
+
+  var onFormErrorSubmit = function () {
     showUploadPopup(errorUploadPopup);
     hideUploadPopup(errorUploadPopup);
   };
-
-  window.adForm.addEventListener('submit', function (evt) {
-    window.upload(new FormData(window.adForm), formSuccessHandler, formErrorHandler);
-    evt.preventDefault();
-  });
 
   // меняет значение поля цена в зависимоти от выбранного типа недвижимости
   var changeFieldPriceAttribute = function (price) {
@@ -60,18 +72,40 @@
     });
   };
 
-  // Устанавливает взаимоограничения на поля с выбором кол-ва госте и кол-ва комнат
-  var onFieldsRoomOrGuestChange = function () {
-    var numberOfRooms = parseInt(formFieldRooms.value, 10);
-    var numberOfGuests = parseInt(formFieldCapacity.value, 10);
-    if (numberOfRooms < numberOfGuests) {
-      formFieldCapacity.setCustomValidity('Количество комнат не соответствует числу гостей');
-    } else if (numberOfRooms === 100 & numberOfGuests !== 0) {
-      formFieldCapacity.setCustomValidity('Так много комнат не для гостей');
-    } else {
-      formFieldCapacity.setCustomValidity('');
+  // Устанавливает ограничения на поле с выбором кол-ва гостей в зависимости от выбора кол-ва комнат
+  var onFieldRoomsChange = function () {
+    var roomNumberSel = formFieldRooms.options[formFieldRooms.selectedIndex].value;
+    if (roomNumberSel === '1') {
+      formFieldCapacity.options[0].disabled = true;
+      formFieldCapacity.options[1].disabled = true;
+      formFieldCapacity.options[2].selected = true;
+      formFieldCapacity.options[2].disabled = false;
+      formFieldCapacity.options[3].disabled = true;
+    } else if (roomNumberSel === '2') {
+      formFieldCapacity.options[0].disabled = true;
+      formFieldCapacity.options[1].selected = true;
+      formFieldCapacity.options[1].disabled = false;
+      formFieldCapacity.options[2].disabled = false;
+      formFieldCapacity.options[3].disabled = true;
+    } else if (roomNumberSel === '3') {
+      formFieldCapacity.options[0].selected = true;
+      formFieldCapacity.options[0].disabled = false;
+      formFieldCapacity.options[1].disabled = false;
+      formFieldCapacity.options[2].disabled = false;
+      formFieldCapacity.options[3].disabled = true;
+    } else if (roomNumberSel === '100') {
+      formFieldCapacity.options[0].disabled = true;
+      formFieldCapacity.options[1].disabled = true;
+      formFieldCapacity.options[2].disabled = true;
+      formFieldCapacity.options[3].disabled = false;
+      formFieldCapacity.options[3].selected = true;
     }
   };
+
+  window.adForm.addEventListener('submit', function (evt) {
+    window.upload(new FormData(window.adForm), onFormSuccessSubmit, onFormErrorSubmit);
+    evt.preventDefault();
+  });
 
   formFieldType.addEventListener('change', function () {
     changeFieldPriceAttribute(PRICES_FOR_HOUSE_TYPES[formFieldType.value]);
@@ -79,9 +113,8 @@
 
   onFieldsOfStayChange(formFieldTimeIn, formFieldTimeOut);
   onFieldsOfStayChange(formFieldTimeOut, formFieldTimeIn);
-
-  formFieldRooms.addEventListener('change', onFieldsRoomOrGuestChange);
-  formFieldCapacity.addEventListener('change', onFieldsRoomOrGuestChange);
+  onFieldRoomsChange();
+  formFieldRooms.addEventListener('change', onFieldRoomsChange);
 })();
 
 
