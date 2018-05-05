@@ -7,9 +7,9 @@
     var pinsList = document.createDocumentFragment();
     window.pins = window.filteredMapObjects || window.mapObjects;
 
-    if (window.pins.length > 5) {
-      window.pins = (window.filteredMapObjects || window.mapObjects).slice(-(window.pins.length - 5));
-    }
+    // if (window.pins.length > 5) {
+    //   window.pins = (window.filteredMapObjects || window.mapObjects).slice(-(window.pins.length - 5));
+    // }
 
     window.pins.forEach(function (mapCard, index) {
       var pinElement = pinTemplate.cloneNode(true);
