@@ -5,11 +5,7 @@
   window.renderPins = function () {
     var pinTemplate = document.querySelector('#map-card-template').content.querySelector('.map__pin');
     var pinsList = document.createDocumentFragment();
-    window.pins = window.filteredMapObjects || window.mapObjects;
-
-    // if (window.pins.length > 5) {
-    //   window.pins = (window.filteredMapObjects || window.mapObjects).slice(-(window.pins.length - 5));
-    // }
+    window.pins = window.filteredMapObjects || window.mapObjects.slice(5);
 
     window.pins.forEach(function (mapCard, index) {
       var pinElement = pinTemplate.cloneNode(true);
@@ -35,7 +31,6 @@
         checks.push(window.mapFilter.features.every(function (filter) {
           return mapCard.offer.features.includes(filter);
         }));
-        console.log(window.mapFilter);
       }
 
       if (window.mapFilter.type &&
@@ -62,6 +57,7 @@
         return isValid;
       });
     });
+    window.filteredMapObjects.splice(5);
     window.renderPins();
     window.listenToPins();
   };

@@ -131,6 +131,7 @@
     enabledAdForm();
     disabledFieldset(false);
     window.changeValueInputAdress();
+    window.filteredMapObjects = null;
     window.renderPins();
     window.listenToPins();
   };
