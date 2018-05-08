@@ -54,11 +54,12 @@
     for (var j = 0; j < window.map.childNodes.length; j++) {
       if (window.map.childNodes[j].className === 'map__card popup') {
         window.map.removeChild(document.querySelector('.map').childNodes[j]);
+        document.removeEventListener('keydown', window.onPopupEscPress);
       }
     }
   };
 
-  var onPopupEscPress = function (evt) {
+  window.onPopupEscPress = function (evt) {
     if (evt.keyCode === 27) {
       window.removeCard();
     }
@@ -77,7 +78,6 @@
         var currentEl = evt.currentTarget.getAttribute('data-id');
         window.removeCard();
         window.renderCard((window.mapObjectsNow || window.filteredMapObjects || window.mapObjects), currentEl);
-        document.addEventListener('keydown', onPopupEscPress);
         var buttonPopupClose = window.map.querySelector('.popup__close');
         buttonPopupClose.addEventListener('click', window.removeCard);
         buttonPopupClose.addEventListener('keydown', onPopupButtonClosePress);
@@ -136,12 +136,14 @@
     window.listenToPins();
   };
 
-  mapPinMain.addEventListener('mouseup', onMapPinMainDrop);
-  mapPinMain.addEventListener('keydown', function (evt) {
+  var onPinMainKeydown = function (evt) {
     if (evt.keyCode === 13) {
       onMapPinMainDrop();
     }
-  });
+  };
+
+  mapPinMain.addEventListener('mouseup', onMapPinMainDrop);
+  mapPinMain.addEventListener('keydown', onPinMainKeydown);
 
   window.changeValueInputAdress();
   disableFieldset(true);

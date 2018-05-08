@@ -59,6 +59,7 @@
 
     cardsList.appendChild(cardElement);
     document.querySelector('.map').insertBefore(cardsList, document.querySelector('.map__filters-container'));
+    document.addEventListener('keydown', window.onPopupEscPress);
   };
 
   window.load(onDataSuccessLoad, onDataErrorLoad);
