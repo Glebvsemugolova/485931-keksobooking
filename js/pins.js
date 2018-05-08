@@ -1,15 +1,19 @@
 'use strict';
 
 (function () {
+  var MIN_PRICE = 10000;
+  var MAX_PRICE = 50000;
+  var MAX_NUMBER_OF_PINS = 5;
+
   var priceHelpers = {
     low: function (value) {
-      return value <= 10000;
+      return value <= MIN_PRICE;
     },
     middle: function (value) {
-      return value > 10000 && value <= 50000;
+      return value > MIN_PRICE && value <= MAX_PRICE;
     },
     high: function (value) {
-      return value > 50000;
+      return value > MAX_PRICE;
     }
   };
 
@@ -70,7 +74,7 @@
         return isValid;
       });
     });
-    window.filteredMapObjects.splice(5);
+    window.filteredMapObjects.splice(MAX_NUMBER_OF_PINS);
     window.renderPins();
     window.listenToPins();
   };

@@ -7,6 +7,12 @@
     house: 5000,
     bungalo: 0
   };
+  var DATA_ROOMS = [
+    [2],
+    [2, 1],
+    [2, 1, 0],
+    [3]
+  ];
 
   var formFieldType = document.getElementById('type');
   var formFieldPrice = document.getElementById('price');
@@ -72,33 +78,21 @@
     });
   };
 
+  // отключает все варианты в поле с выбором количества гостей
+  var disabledOptionCapacity = function () {
+    for (var k = 0; k < formFieldCapacity.length; k++) {
+      formFieldCapacity[k].disabled = true;
+    }
+  };
   // Устанавливает ограничения на поле с выбором кол-ва гостей в зависимости от выбора кол-ва комнат
-  var onFieldRoomsChange = function () {
-    var roomNumberSel = formFieldRooms.options[formFieldRooms.selectedIndex].value;
-    if (roomNumberSel === '1') {
-      formFieldCapacity.options[0].disabled = true;
-      formFieldCapacity.options[1].disabled = true;
-      formFieldCapacity.options[2].selected = true;
-      formFieldCapacity.options[2].disabled = false;
-      formFieldCapacity.options[3].disabled = true;
-    } else if (roomNumberSel === '2') {
-      formFieldCapacity.options[0].disabled = true;
-      formFieldCapacity.options[1].selected = true;
-      formFieldCapacity.options[1].disabled = false;
-      formFieldCapacity.options[2].disabled = false;
-      formFieldCapacity.options[3].disabled = true;
-    } else if (roomNumberSel === '3') {
-      formFieldCapacity.options[0].selected = true;
-      formFieldCapacity.options[0].disabled = false;
-      formFieldCapacity.options[1].disabled = false;
-      formFieldCapacity.options[2].disabled = false;
-      formFieldCapacity.options[3].disabled = true;
-    } else if (roomNumberSel === '100') {
-      formFieldCapacity.options[0].disabled = true;
-      formFieldCapacity.options[1].disabled = true;
-      formFieldCapacity.options[2].disabled = true;
-      formFieldCapacity.options[3].disabled = false;
-      formFieldCapacity.options[3].selected = true;
+  var onFieldRoomsChange = function (evt) {
+    var selectedRoomsCount = evt.target.selectedIndex;
+    var guestNumber = DATA_ROOMS[selectedRoomsCount];
+
+    disabledOptionCapacity();
+    for (var l = 0; l < guestNumber.length; l++) {
+      formFieldCapacity[guestNumber[l]].disabled = false;
+      formFieldCapacity.selectedIndex = guestNumber[l];
     }
   };
 
@@ -113,7 +107,8 @@
 
   onFieldsOfStayChange(formFieldTimeIn, formFieldTimeOut);
   onFieldsOfStayChange(formFieldTimeOut, formFieldTimeIn);
-  onFieldRoomsChange();
+  disabledOptionCapacity();
+  formFieldCapacity[DATA_ROOMS[0]].disabled = false;
   formFieldRooms.addEventListener('change', onFieldRoomsChange);
 })();
 

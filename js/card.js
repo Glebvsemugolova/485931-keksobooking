@@ -23,12 +23,7 @@
     window.map.insertAdjacentElement('afterbegin', node);
   };
 
-  // отрисовывает объявление об имуществе соответствующее нажатой метке на карте
-  window.renderCard = function (article, index) {
-    var cardTemplate = document.querySelector('#map-card-template').content.querySelector('.map__card');
-    var cardsList = document.createDocumentFragment();
-    var cardElement = cardTemplate.cloneNode(true);
-
+  var fillingCard = function (article, index, cardElement) {
     cardElement.querySelector('.popup__title').textContent = article[index].offer.title;
     cardElement.querySelector('.popup__text--address').textContent = article[index].offer.address;
     cardElement.querySelector('.popup__text--price').textContent = article[index].offer.price + ' ₽/ночь';
@@ -38,13 +33,18 @@
     cardElement.querySelector('.popup__description').textContent = article[index].offer.description;
     cardElement.querySelector('.popup__photos').textContent = article[index].offer.description.photos;
     cardElement.querySelector('img').src = article[index].author.avatar;
-    cardElement.querySelector('.popup__features').innerHTML = ''; // не знаю можно ли так
+    cardElement.querySelector('.popup__features').innerHTML = '';
+  };
+
+  var createOffersOfCard = function (article, index, cardElement) {
     article[index].offer.features.forEach(function (feature) {
       var el = document.createElement('LI');
       el.className = 'popup__feature popup__feature--' + feature;
       cardElement.querySelector('.popup__features').appendChild(el);
     });
+  };
 
+  var addingPhotosToCard = function (article, index, cardElement) {
     article[index].offer.photos.forEach(function (source) {
       var el = document.createElement('IMG');
 
@@ -56,6 +56,17 @@
 
       cardElement.querySelector('.popup__photos').appendChild(el);
     });
+  };
+
+  // отрисовывает объявление об имуществе соответствующее нажатой метке на карте
+  window.renderCard = function (article, index) {
+    var cardTemplate = document.querySelector('#map-card-template').content.querySelector('.map__card');
+    var cardsList = document.createDocumentFragment();
+    var cardElement = cardTemplate.cloneNode(true);
+
+    fillingCard(article, index, cardElement);
+    createOffersOfCard(article, index, cardElement);
+    addingPhotosToCard(article, index, cardElement);
 
     cardsList.appendChild(cardElement);
     document.querySelector('.map').insertBefore(cardsList, document.querySelector('.map__filters-container'));
