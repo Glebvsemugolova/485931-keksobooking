@@ -99,7 +99,7 @@
     evt.preventDefault();
   };
 
-  dropContainer.ondrop = function(evt) {
+  dropContainer.ondrop = function (evt) {
     // pretty simple -- but not for IE :(
     fileInput.files = evt.dataTransfer.files;
     evt.preventDefault();
@@ -109,7 +109,7 @@
     evt.preventDefault();
   };
 
-  dropContainer.ondrop = function(evt) {
+  dropContainer.ondrop = function (evt) {
     fileInput.files = evt.dataTransfer.files;
     evt.preventDefault();
   };
@@ -118,7 +118,7 @@
     evt.preventDefault();
   };
 
-  lowerDropContainer.ondrop = function(evt) {
+  lowerDropContainer.ondrop = function (evt) {
     lowerFileInput.files = evt.dataTransfer.files;
     evt.preventDefault();
   };
