@@ -10,6 +10,12 @@
     width: 70,
     height: 70
   };
+  var fileTypes = [
+    'image/jpeg',
+    'image/pjpeg',
+    'image/png',
+    'image/gif'
+  ];
 
   var fileChooser = document.querySelector('#avatar');
   var preview = document.querySelector('.ad-form-header__preview img');
@@ -42,65 +48,45 @@
     }
   };
 
-  var onLowerFileChooserChange = function () {
-    var file = lowerFileChooser.files[0];
-    var fileName = file.name.toLowerCase();
-
-    var matches = FILE_TYPES.some(function (it) {
-      return fileName.endsWith(it);
-    });
-
-    if (matches) {
-      var reader = new FileReader();
-
-      reader.addEventListener('load', function () {
-        var el = document.createElement('IMG');
-        lowerPreview.appendChild(el);
-        el.src = reader.result;
-        el.setAttribute('width', LOWER_IMAGES_SIZES.width);
-        el.setAttribute('height', LOWER_IMAGES_SIZES.height);
-      });
-
-      reader.readAsDataURL(file);
-    }
-  };
-
-  /*var onLowerFileChooserChange = function () {
-    var file = lowerFileChooser.files;
-    var filesNames = [];
-    for (var i = 0; i < file.length; i++) {
-      filesNames.push(file[i]);
-      file[i].name.toLowerCase();
-    }
-    for (var l = 0; l < file.length; l++) {
-      var matches = FILE_TYPES.some(function (it) {
-        return filesNames[l].endsWith(it);
-      });
-    }
-
-    if (matches) {
-      var reader = new FileReader();
-
-      reader.addEventListener('load', function () {
-        var el = document.createElement('IMG');
-        lowerPreview.appendChild(el);
-        el.src = reader.result;
-        el.setAttribute('width', '70');
-        el.setAttribute('height', '70');
-      });
-
-      for (var k = 0; k < files.length; k++) {
-        reader.readAsDataURL(files[k]);
+  function validFileType(file) {
+    for (var i = 0; i < fileTypes.length; i++) {
+      if (file.type === fileTypes[i]) {
+        return true;
       }
     }
-  };*/
+
+    return false;
+  }
+
+  var onLowerFileChooserChange = function () {
+    while (lowerPreview.firstChild) {
+      lowerPreview.removeChild(lowerPreview.firstChild);
+    }
+
+    var curFiles = lowerFileInput.files;
+    var list = document.createElement('ol');
+    lowerPreview.appendChild(list);
+    for (var i = 0; i < curFiles.length; i++) {
+      var listItem = document.createElement('li');
+      if (validFileType(curFiles[i])) {
+        var image = document.createElement('img');
+        image.src = window.URL.createObjectURL(curFiles[i]);
+        listItem.appendChild(image);
+        image.setAttribute('width', LOWER_IMAGES_SIZES.width);
+        image.setAttribute('height', LOWER_IMAGES_SIZES.height);
+        list.style.padding = 0;
+        list.style.margin = 0;
+        list.style.listStyle = 'none';
+      }
+      list.appendChild(listItem);
+    }
+  };
 
   dropContainer.ondragover = dropContainer.ondragenter = function (evt) {
     evt.preventDefault();
   };
 
   dropContainer.ondrop = function (evt) {
-    // pretty simple -- but not for IE :(
     fileInput.files = evt.dataTransfer.files;
     evt.preventDefault();
   };
