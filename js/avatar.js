@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+
   var UPPER_IMAGE_SIZES = {
     width: 60,
     height: 70
@@ -10,7 +10,7 @@
     width: 70,
     height: 70
   };
-  var fileTypes = [
+  var FILE_TYPES = [
     'image/jpeg',
     'image/pjpeg',
     'image/png',
@@ -28,13 +28,7 @@
 
   var onFileChooserChange = function () {
     var file = fileChooser.files[0];
-    var fileName = file.name.toLowerCase();
-
-    var matches = FILE_TYPES.some(function (it) {
-      return fileName.endsWith(it);
-    });
-
-    if (matches) {
+    if (validFileType(file)) {
       var reader = new FileReader();
 
       reader.addEventListener('load', function () {
@@ -49,8 +43,8 @@
   };
 
   function validFileType(file) {
-    for (var i = 0; i < fileTypes.length; i++) {
-      if (file.type === fileTypes[i]) {
+    for (var i = 0; i < FILE_TYPES.length; i++) {
+      if (file.type === FILE_TYPES[i]) {
         return true;
       }
     }
