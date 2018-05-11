@@ -4,11 +4,16 @@
   var PIN_MAIN_WIDTH = 65;
   var PIN_MAIN_HEIGHT = 65;
   var PIN_MAIN_TAIL = 22;
+  var BISECT = 2;
   var DRAG_LOCATION = {
     xMin: 65,
     xMax: 1200,
     yMin: 150,
     yMax: 500
+  };
+  var KEY_CODE = {
+    ENTER: 13,
+    ESC: 27
   };
 
   var mapPinMain = document.querySelector('.map__pin--main');
@@ -31,9 +36,9 @@
   // меняет значение в поле адресс в зависимости от активности карты
   window.changeValueInputAdress = function () {
     if (window.map.classList.contains('map--faded')) {
-      inputAddress.value = (mapPinMain.offsetLeft + mapPinMain.offsetWidth / 2) + ', ' + (mapPinMain.offsetTop + mapPinMain.offsetHeight / 2 + 22);
+      inputAddress.value = (mapPinMain.offsetLeft + mapPinMain.offsetWidth / BISECT) + ', ' + (mapPinMain.offsetTop + mapPinMain.offsetHeight / BISECT + PIN_MAIN_TAIL);
     } else {
-      inputAddress.value = (mapPinMain.offsetLeft + mapPinMain.offsetWidth / 2) + ', ' + (mapPinMain.offsetTop + mapPinMain.offsetHeight);
+      inputAddress.value = (mapPinMain.offsetLeft + mapPinMain.offsetWidth / BISECT) + ', ' + (mapPinMain.offsetTop + mapPinMain.offsetHeight);
     }
   };
 
@@ -60,13 +65,13 @@
   };
 
   window.onPopupEscPress = function (evt) {
-    if (evt.keyCode === 27) {
+    if (evt.keyCode === KEY_CODE.ESC) {
       window.removeCard();
     }
   };
 
   var onPopupButtonClosePress = function (evt) {
-    if (evt.keyCode === 13) {
+    if (evt.keyCode === KEY_CODE.ENTER) {
       window.removeCard();
     }
   };
@@ -137,7 +142,7 @@
   };
 
   var onPinMainKeydown = function (evt) {
-    if (evt.keyCode === 13) {
+    if (evt.keyCode === KEY_CODE.ENTER) {
       onMapPinMainDrop();
     }
   };
